@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZONE — AI Training Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange:    #e04e1f;
+  --orange-2:  #f47c20;
+  --orange-10: rgba(224,78,31,0.08);
+  --orange-20: rgba(224,78,31,0.18);
+  --green:     #1db87a;
+  --blue:      #2f7ef5;
+  --yellow:    #f5c330;
+  --red:       #e63e3e;
+  --bg:        #ffffff;
+  --bg2:       #f8f7f5;
+  --bg3:       #f0ede8;
+  --ink:       #111010;
+  --ink-2:     #3a3836;
+  --ink-3:     rgba(17,16,16,0.45);
+  --border:    rgba(17,16,16,0.08);
+  --border-2:  rgba(17,16,16,0.13);
+  --font-h: 'Plus Jakarta Sans', sans-serif;
+  --font-b: 'Inter', sans-serif;
+  --r: 18px;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-b); line-height: 1.6; overflow-x: hidden; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 64px; height: 64px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 9px;
+  text-decoration: none; flex-shrink: 0;
+}
+.nav-logo img { width: 26px; height: 26px; }
+.nav-logo-text {
+  font-family: var(--font-h); font-size: 18px; font-weight: 900;
+  letter-spacing: -0.5px; color: var(--ink);
+  white-space: nowrap;
+}
+.nav-logo-text span { color: var(--orange); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--ink-3); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta { display: flex; gap: 10px; align-items: center; }
+.btn-ghost {
+  padding: 8px 18px; border: 1px solid var(--border-2); border-radius: 100px;
+  color: var(--ink-2); font-size: 13px; font-weight: 500; background: none;
+  text-decoration: none; transition: all .2s; cursor: pointer;
+}
+.btn-ghost:hover { border-color: var(--ink-2); }
+.btn-primary {
+  padding: 9px 22px; border-radius: 100px;
+  background: var(--orange); color: white; font-size: 13px; font-weight: 600;
+  border: none; text-decoration: none; cursor: pointer; transition: all .2s;
+}
+.btn-primary:hover { background: #c94218; transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  padding: 140px 64px 100px;
+  text-align: center;
+  background: var(--bg);
+  position: relative; overflow: hidden;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 14px; border-radius: 100px;
+  border: 1px solid var(--border-2); background: var(--bg2);
+  color: var(--ink-3); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.03em; margin-bottom: 28px;
+}
+.badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); flex-shrink: 0; animation: pulse-dot 2.5s infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+
+.hero h1 {
+  font-family: var(--font-h); font-size: 72px; font-weight: 900;
+  line-height: .97; letter-spacing: -3.5px; margin-bottom: 22px; color: var(--ink);
+  max-width: 860px; margin-left: auto; margin-right: auto;
+}
+.hero h1 em { font-style: normal; color: var(--orange); }
+.hero-sub {
+  font-size: 17px; color: var(--ink-3); line-height: 1.75;
+  max-width: 500px; margin: 0 auto 40px; font-weight: 400;
+}
+.hero-actions {
+  display: flex; gap: 12px; justify-content: center; align-items: center;
+  margin-bottom: 72px; flex-wrap: wrap;
+}
+.btn-hero {
+  padding: 13px 30px; border-radius: 100px;
+  background: var(--orange); color: white; font-size: 15px; font-weight: 700;
+  border: none; text-decoration: none; cursor: pointer;
+  font-family: var(--font-h); transition: all .22s; letter-spacing: -0.2px;
+}
+.btn-hero:hover { background: #c94218; transform: translateY(-1px); }
+.btn-hero-outline {
+  padding: 12px 26px; border-radius: 100px;
+  border: 1.5px solid var(--border-2); color: var(--ink-2);
+  font-size: 15px; font-weight: 500; background: none;
+  text-decoration: none; cursor: pointer; transition: all .22s;
+}
+.btn-hero-outline:hover { border-color: var(--ink-2); color: var(--ink); }
+
+/* Hero phone */
+.hero-phone-wrap {
+  position: relative; display: inline-block; margin: 0 auto;
+}
+.hero-phone {
+  width: 300px; border-radius: 44px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.13), 0 0 0 1px rgba(0,0,0,.06);
+  display: block; position: relative; z-index: 2;
+}
+.hero-phone-card {
+  position: absolute; z-index: 3;
+  background: #fff; border-radius: 14px;
+  border: 1px solid var(--border); padding: 12px 16px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.10);
+  white-space: nowrap;
+}
+.hp-card-lbl { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+.hp-card-val { font-family: var(--font-h); font-size: 20px; font-weight: 800; line-height: 1; }
+.hp-card-sub { font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+.card-recovery { top: 60px; left: -110px; animation: card-float 5s ease-in-out infinite; }
+.card-workout  { bottom: 140px; left: -120px; animation: card-float 5s 1.5s ease-in-out infinite; }
+.card-race     { top: 180px; right: -100px; animation: card-float 5s 3s ease-in-out infinite; }
+@keyframes card-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+.c-orange { color: var(--orange); }
+.c-green  { color: var(--green); }
+.c-blue   { color: var(--blue); }
+
+/* Stats row */
+.hero-stats {
+  display: flex; justify-content: center; gap: 0;
+  margin-top: 60px;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+}
+.h-stat { flex: 0 0 160px; text-align: center; }
+.h-stat + .h-stat { border-left: 1px solid var(--border); }
+.h-stat-num { font-family: var(--font-h); font-size: 28px; font-weight: 800; letter-spacing: -1px; color: var(--ink); }
+.h-stat-num .s { color: var(--orange); }
+.h-stat-lbl { font-size: 12px; color: var(--ink-3); margin-top: 2px; font-weight: 500; }
+
+/* ── STRIP ── */
+.strip {
+  overflow: hidden; white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0; background: var(--bg2);
+}
+.strip-inner { display: inline-flex; animation: marquee 38s linear infinite; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.strip-item {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 0 28px; font-size: 11px; font-weight: 600;
+  color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em;
+}
+.strip-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border-2); flex-shrink: 0; }
+
+/* ── SECTION BASE ── */
+.section { padding: 108px 64px; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.lbl {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .12em;
+  color: var(--orange); font-weight: 600; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.lbl::before { content:''; width: 20px; height: 2px; background: var(--orange); border-radius: 1px; }
+h2.title {
+  font-family: var(--font-h); font-size: 48px; font-weight: 800;
+  letter-spacing: -2px; line-height: 1.06; margin-bottom: 18px; color: var(--ink);
+}
+h2.title em { font-style: normal; color: var(--orange); }
+.body-text { font-size: 16px; color: var(--ink-3); line-height: 1.75; max-width: 480px; }
+
+/* ── FEATURES ── */
+.feat-section { background: var(--bg2); }
+.feat-header { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; margin-bottom: 56px; }
+.feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.feat-card {
+  background: var(--bg); padding: 36px 32px;
+  border-radius: var(--r); border: 1px solid var(--border);
+  transition: box-shadow .25s, transform .25s; cursor: default;
+}
+.feat-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.08); transform: translateY(-2px); }
+.feat-icon-wrap {
+  width: 40px; height: 40px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.fi-o { background: var(--orange-10); }
+.fi-g { background: rgba(29,184,122,.10); }
+.fi-b { background: rgba(47,126,245,.10); }
+.feat-icon-svg { width: 20px; height: 20px; }
+.feat-nm { font-family: var(--font-h); font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--ink); }
+.feat-desc { font-size: 14px; color: var(--ink-3); line-height: 1.7; }
+
+/* ── TWO COL ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; align-items: center; }
+.two-col.flip { direction: rtl; }
+.two-col.flip > * { direction: ltr; }
+
+/* ── PHONE SIDE ── */
+.phone-side {
+  display: flex; justify-content: center; align-items: center;
+  position: relative; padding: 40px;
+}
+.side-phone {
+  width: 260px; border-radius: 40px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.06);
+  display: block;
+}
+
+/* ── RECOVERY ── */
+.recovery-section { background: var(--bg2); }
+.ring-wrap {
+  display: flex; justify-content: center; align-items: center;
+  padding: 40px; position: relative;
+}
+.ring-svg { width: 240px; height: 240px; }
+.ring-center { position: absolute; text-align: center; }
+.ring-num { font-family: var(--font-h); font-size: 60px; font-weight: 900; letter-spacing: -3px; color: var(--green); line-height: 1; }
+.ring-lbl { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+.ring-status { font-size: 13px; color: var(--green); font-weight: 600; margin-top: 5px; }
+.metric-rows { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; }
+.metric-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; background: var(--bg); border-radius: 14px; border: 1px solid var(--border);
+}
+.metric-icon-wrap {
+  width: 32px; height: 32px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.metric-info { flex: 1; }
+.metric-nm { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; font-weight: 500; }
+.metric-vl { font-family: var(--font-h); font-size: 18px; font-weight: 700; line-height: 1; }
+.metric-bar-bg { height: 3px; background: var(--border); border-radius: 2px; margin-top: 7px; }
+.metric-bar    { height: 100%; border-radius: 2px; transition: width 1.5s ease; }
+
+/* ── PLAN CARD ── */
+.plan-section { background: var(--bg); }
+.plan-card {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 22px; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,.07);
+}
+.plan-card-head {
+  padding: 22px 26px; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--bg2);
+}
+.plan-sup { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .09em; margin-bottom: 3px; font-weight: 500; }
+.plan-nm  { font-family: var(--font-h); font-size: 20px; font-weight: 800; letter-spacing: -.4px; }
+.plan-dt  { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
+.plan-btn { padding: 6px 14px; border-radius: 100px; border: 1px solid var(--border-2); background: none; color: var(--ink-3); font-size: 12px; cursor: pointer; transition: all .2s; }
+.plan-btn:hover { border-color: var(--ink-2); color: var(--ink); }
+.plan-meta { display: flex; border-bottom: 1px solid var(--border); }
+.pm { flex: 1; padding: 16px; text-align: center; }
+.pm + .pm { border-left: 1px solid var(--border); }
+.pm-num { font-family: var(--font-h); font-size: 19px; font-weight: 800; color: var(--ink); }
+.pm-lbl { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.plan-days { padding: 16px 18px; display: flex; flex-direction: column; gap: 7px; }
+.day-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; border-radius: 13px; border: 1px solid var(--border);
+  background: var(--bg2); transition: border-color .2s;
+}
+.day-row.today { border-color: rgba(224,78,31,.3); background: rgba(224,78,31,.04); }
+.day-icon {
+  width: 34px; height: 34px; border-radius: 9px; background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.day-icon svg { width: 16px; height: 16px; }
+.day-nm { font-size: 10px; color: var(--ink-3); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.day-wk { font-family: var(--font-h); font-size: 14px; font-weight: 700; margin-top: 2px; }
+.day-tag { margin-left: auto; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+.tag-easy { background: rgba(224,78,31,.1); color: var(--orange-2); }
+.tag-hard { background: rgba(47,126,245,.1); color: var(--blue); }
+
+/* ── ACTIVITIES ── */
+.act-section { background: var(--bg2); }
+.sport-tabs { display: flex; gap: 6px; margin-bottom: 24px; }
+.sport-tab {
+  padding: 7px 16px; border-radius: 100px;
+  border: 1px solid var(--border-2); background: none;
+  color: var(--ink-3); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all .2s;
+}
+.sport-tab.active { background: var(--orange); color: white; border-color: var(--orange); }
+.sport-tab:hover:not(.active) { color: var(--ink); border-color: var(--ink-2); }
+.act-list { display: flex; flex-direction: column; gap: 8px; }
+.act-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 15px 18px; border-radius: var(--r);
+  background: var(--bg); border: 1px solid var(--border);
+  transition: border-color .2s, transform .2s; cursor: default;
+}
+.act-card:hover { border-color: var(--border-2); transform: translateX(3px); }
+.act-icon {
+  width: 40px; height: 40px; border-radius: 11px; background: var(--bg2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.act-icon svg { width: 18px; height: 18px; }
+.act-nm { font-family: var(--font-h); font-size: 14px; font-weight: 700; color: var(--ink); }
+.act-dt { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+.act-stats { display: flex; gap: 18px; margin-left: auto; }
+.act-sv { font-family: var(--font-h); font-size: 13px; font-weight: 700; color: var(--ink); }
+.act-sl { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+
+/* ── HR ZONES ── */
+.zones-section { background: var(--bg); }
+.perf-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 32px; }
+.perf-chip {
+  padding: 14px 20px; border-radius: 14px; border: 1px solid var(--border);
+  background: var(--bg2);
+}
+.perf-val { font-family: var(--font-h); font-size: 20px; font-weight: 800; }
+.perf-lbl { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.zones-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 22px; padding: 30px; }
+.zones-hd { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 600; margin-bottom: 18px; }
+.hz-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 12px; background: var(--bg);
+  border: 1px solid var(--border); margin-bottom: 6px;
+}
+.hz-bar { width: 3px; height: 26px; border-radius: 2px; flex-shrink: 0; }
+.hz-nm { font-family: var(--font-h); font-size: 14px; font-weight: 600; flex: 1; color: var(--ink); }
+.hz-nm .hz-s { font-size: 11px; color: var(--ink-3); font-weight: 400; margin-left: 4px; }
+.hz-rng { font-size: 13px; font-weight: 500; }
+
+/* ── COACHING ── */
+.coach-section { background: var(--bg2); }
+.athlete-list { display: flex; flex-direction: column; gap: 8px; }
+.athlete-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 15px 18px; border-radius: var(--r);
+  background: var(--bg); border: 1px solid var(--border);
+  transition: border-color .2s, transform .2s;
+}
+.athlete-row:hover { border-color: var(--border-2); transform: translateX(3px); }
+.av-wrap { position: relative; flex-shrink: 0; }
+.av {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--bg2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-h); font-size: 14px; font-weight: 700; color: var(--ink-3);
+}
+.av-dot { position: absolute; bottom: 1px; right: 1px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--bg); }
+.av-dot.g { background: var(--green); }
+.av-dot.y { background: var(--yellow); }
+.av-dot.r { background: var(--red); }
+.ath-nm { font-family: var(--font-h); font-size: 14px; font-weight: 700; color: var(--ink); }
+.ath-meta { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+.ath-right { margin-left: auto; text-align: right; flex-shrink: 0; }
+.ath-pct { font-family: var(--font-h); font-size: 18px; font-weight: 800; line-height: 1; }
+.ath-rlbl { font-size: 10px; color: var(--ink-3); }
+.ath-km  { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+
+/* ── TESTIMONIALS ── */
+.testi-section { background: var(--bg); }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+.testi-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 28px; transition: box-shadow .25s, transform .25s;
+}
+.testi-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.07); transform: translateY(-2px); }
+.testi-stars { display: flex; gap: 4px; margin-bottom: 14px; }
+.star { width: 14px; height: 14px; background: var(--orange); border-radius: 2px; clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); }
+.testi-quote { font-size: 15px; color: var(--ink-2); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 10px; }
+.testi-av {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-family: var(--font-h); font-size: 12px; font-weight: 700; color: var(--ink-3);
+}
+.testi-nm { font-family: var(--font-h); font-size: 13px; font-weight: 700; }
+.testi-role { font-size: 12px; color: var(--ink-3); }
+
+/* ── CTA BAND ── */
+.cta-band {
+  background: var(--orange); padding: 80px 64px;
+  display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center;
+  position: relative; overflow: hidden;
+}
+.cta-band::before {
+  content: ''; position: absolute; right: -80px; top: -80px;
+  width: 320px; height: 320px; border-radius: 50%;
+  background: rgba(255,255,255,.06);
+}
+.cta-band::after {
+  content: ''; position: absolute; right: 160px; bottom: -100px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,.04);
+}
+.cta-band-inner { position: relative; z-index: 1; }
+.cta-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 100px;
+  background: rgba(255,255,255,.2); color: rgba(255,255,255,.9);
+  font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.cta-band h2 {
+  font-family: var(--font-h); font-size: 44px; font-weight: 900;
+  letter-spacing: -2px; line-height: 1.05; color: white; margin-bottom: 12px;
+}
+.cta-band p { font-size: 16px; color: rgba(255,255,255,.75); line-height: 1.6; max-width: 440px; }
+.cta-band-btns { display: flex; flex-direction: column; gap: 10px; z-index: 1; position: relative; }
+.app-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 24px; border-radius: 14px;
+  background: white; border: none;
+  color: var(--ink); text-decoration: none; transition: all .22s;
+  min-width: 180px;
+}
+.app-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+.app-btn-txt .sm { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .07em; }
+.app-btn-txt .lg { font-family: var(--font-h); font-size: 17px; font-weight: 800; color: var(--ink); display: block; margin-top: 1px; letter-spacing: -.3px; }
+.app-btn-icon { flex-shrink: 0; }
+.app-btn-icon svg { width: 26px; height: 26px; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink); color: white;
+  padding: 56px 64px 40px;
+}
+.footer-top {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 48px;
+}
+.footer-logo { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+.footer-logo img { width: 22px; }
+.footer-logo-txt { font-family: var(--font-h); font-size: 17px; font-weight: 900; letter-spacing: -.3px; color: white; }
+.footer-logo-txt span { color: var(--orange-2); }
+.footer-desc { font-size: 14px; color: rgba(255,255,255,.45); line-height: 1.7; max-width: 220px; }
+.footer-col-title { font-family: var(--font-h); font-size: 13px; font-weight: 700; color: white; margin-bottom: 16px; text-transform: uppercase; letter-spacing: .06em; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { color: rgba(255,255,255,.45); text-decoration: none; font-size: 14px; transition: color .2s; }
+.footer-links a:hover { color: white; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.08); padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-size: 13px; color: rgba(255,255,255,.35); }
+.footer-legal { display: flex; gap: 24px; }
+.footer-legal a { font-size: 13px; color: rgba(255,255,255,.35); text-decoration: none; transition: color .2s; }
+.footer-legal a:hover { color: rgba(255,255,255,.7); }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: .08s; }
+.d2 { transition-delay: .16s; }
+.d3 { transition-delay: .24s; }
+.d4 { transition-delay: .32s; }
+
+@media (max-width: 1080px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  .hero h1 { font-size: 48px; }
+  .section { padding: 72px 24px; }
+  .two-col, .feat-header { grid-template-columns: 1fr; gap: 40px; }
+  .feat-grid { grid-template-columns: 1fr 1fr; }
+  .cta-band { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .testi-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="assets/logo.svg" alt="Zone">
+    <span class="nav-logo-text">ZO<span>N</span>E</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#recovery">Recovery</a></li>
+    <li><a href="#plans">Training</a></li>
+    <li><a href="#coaching">Coaching</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#" class="btn-ghost">Log in</a>
+    <a href="#" class="btn-primary">Get started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    AI-Powered Training Intelligence
+  </div>
+  <h1>Train with <em>purpose.</em><br>Race your best.</h1>
+  <p class="hero-sub">ZONE reads your body's signals — HRV, sleep, strain — and builds training plans that adapt to you. Not the athlete you wish you were. The one you actually are.</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-hero">Start for free</a>
+    <a href="#features" class="btn-hero-outline">See how it works</a>
+  </div>
+
+  <div class="hero-phone-wrap">
+    <!-- Recovery chip -->
+    <div class="hero-phone-card card-recovery">
+      <div class="hp-card-lbl">Recovery</div>
+      <div class="hp-card-val c-green">88%</div>
+      <div class="hp-card-sub">Ready to perform</div>
+    </div>
+    <!-- Workout chip -->
+    <div class="hero-phone-card card-workout">
+      <div class="hp-card-lbl">Today's workout</div>
+      <div class="hp-card-val c-orange">Run easy</div>
+      <div class="hp-card-sub">40 min · Zone 2</div>
+    </div>
+    <!-- Race chip -->
+    <div class="hero-phone-card card-race">
+      <div class="hp-card-lbl">10K Race</div>
+      <div class="hp-card-val c-blue">145</div>
+      <div class="hp-card-sub">days to go</div>
+    </div>
+    <img class="hero-phone" src="assets/screen-home.png" alt="ZONE home screen">
+  </div>
+
+  <div class="hero-stats">
+    <div class="h-stat">
+      <div class="h-stat-num">50<span class="s">K+</span></div>
+      <div class="h-stat-lbl">Athletes</div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-num">2.8<span class="s">M</span></div>
+      <div class="h-stat-lbl">Workouts logged</div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-num">94<span class="s">%</span></div>
+      <div class="h-stat-lbl">Finish their races</div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-num" style="color:var(--orange)">#1</div>
+      <div class="h-stat-lbl">AI Training App</div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <span class="strip-item"><span class="strip-dot"></span>HRV Tracking</span>
+    <span class="strip-item"><span class="strip-dot"></span>AI Training Plans</span>
+    <span class="strip-item"><span class="strip-dot"></span>Running</span>
+    <span class="strip-item"><span class="strip-dot"></span>Cycling</span>
+    <span class="strip-item"><span class="strip-dot"></span>Triathlon</span>
+    <span class="strip-item"><span class="strip-dot"></span>VO₂max Analysis</span>
+    <span class="strip-item"><span class="strip-dot"></span>Coach Dashboard</span>
+    <span class="strip-item"><span class="strip-dot"></span>Race Countdown</span>
+    <span class="strip-item"><span class="strip-dot"></span>Zone Training</span>
+    <span class="strip-item"><span class="strip-dot"></span>HRV Tracking</span>
+    <span class="strip-item"><span class="strip-dot"></span>AI Training Plans</span>
+    <span class="strip-item"><span class="strip-dot"></span>Running</span>
+    <span class="strip-item"><span class="strip-dot"></span>Cycling</span>
+    <span class="strip-item"><span class="strip-dot"></span>Triathlon</span>
+    <span class="strip-item"><span class="strip-dot"></span>VO₂max Analysis</span>
+    <span class="strip-item"><span class="strip-dot"></span>Coach Dashboard</span>
+    <span class="strip-item"><span class="strip-dot"></span>Race Countdown</span>
+    <span class="strip-item"><span class="strip-dot"></span>Zone Training</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features" class="section feat-section">
+  <div class="section-inner">
+    <div class="feat-header">
+      <div>
+        <div class="lbl reveal">Everything your training needs</div>
+        <h2 class="title reveal d1">Built for athletes<br>who don't settle</h2>
+      </div>
+      <p class="body-text reveal d2">From your first training run to crossing a finish line — ZONE is the intelligent companion that makes every session count.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon-wrap fi-o">
+          <svg class="feat-icon-svg" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2C7 2 5 5 5 8c0 4 5 10 5 10s5-6 5-10c0-3-2-6-5-6z" stroke="#e04e1f" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="10" cy="8" r="2" stroke="#e04e1f" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="feat-nm">AI Training Plans</div>
+        <div class="feat-desc">Periodized plans built around your goal race, fitness level, and training time. Adjusts week by week.</div>
+      </div>
+      <div class="feat-card reveal d1">
+        <div class="feat-icon-wrap fi-g">
+          <svg class="feat-icon-svg" viewBox="0 0 20 20" fill="none">
+            <path d="M3 10h2l2-6 3 12 2-9 2 5 1-2h2" stroke="#1db87a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="feat-nm">Recovery Intelligence</div>
+        <div class="feat-desc">Daily readiness scores powered by HRV, sleep quality, and training strain. Know when to push.</div>
+      </div>
+      <div class="feat-card reveal d2">
+        <div class="feat-icon-wrap fi-b">
+          <svg class="feat-icon-svg" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="12" width="3" height="5" rx="1" fill="#2f7ef5"/>
+            <rect x="8.5" y="8" width="3" height="9" rx="1" fill="#2f7ef5" opacity=".6"/>
+            <rect x="14" y="4" width="3" height="13" rx="1" fill="#2f7ef5" opacity=".35"/>
+          </svg>
+        </div>
+        <div class="feat-nm">Performance Profiling</div>
+        <div class="feat-desc">Auto-detect VO₂max, threshold pace, and HR zones from your activities. Always accurate.</div>
+      </div>
+      <div class="feat-card reveal d1">
+        <div class="feat-icon-wrap fi-o">
+          <svg class="feat-icon-svg" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="7" stroke="#e04e1f" stroke-width="1.5"/>
+            <path d="M10 6v4l3 2" stroke="#e04e1f" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="feat-nm">Multi-Sport Tracking</div>
+        <div class="feat-desc">Running, cycling, swimming, triathlon. Log every session across all disciplines in one place.</div>
+      </div>
+      <div class="feat-card reveal d2">
+        <div class="feat-icon-wrap fi-g">
+          <svg class="feat-icon-svg" viewBox="0 0 20 20" fill="none">
+            <circle cx="7" cy="7" r="3" stroke="#1db87a" stroke-width="1.5"/>
+            <circle cx="14" cy="7" r="3" stroke="#1db87a" stroke-width="1.5"/>
+            <path d="M2 17c0-3 2-5 5-5h6c3 0 5 2 5 5" stroke="#1db87a" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="feat-nm">Coaching Dashboard</div>
+        <div class="feat-desc">Coaches track a full roster — recovery scores, weekly volume, and race readiness at a glance.</div>
+      </div>
+      <div class="feat-card reveal d3">
+        <div class="feat-icon-wrap fi-b">
+          <svg class="feat-icon-svg" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="7" stroke="#2f7ef5" stroke-width="1.5"/>
+            <path d="M10 6v4" stroke="#2f7ef5" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="10" cy="14" r="1" fill="#2f7ef5"/>
+          </svg>
+        </div>
+        <div class="feat-nm">Goal-Led Planning</div>
+        <div class="feat-desc">Set a race, set a date. ZONE builds back from your goal to make sure you peak at exactly the right moment.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECOVERY -->
+<section id="recovery" class="section recovery-section">
+  <div class="section-inner">
+    <div class="two-col">
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 240 240">
+          <circle cx="120" cy="120" r="104" fill="none" stroke="var(--border)" stroke-width="10"/>
+          <circle cx="120" cy="120" r="104" fill="none" stroke="#1db87a" stroke-width="10"
+            stroke-dasharray="653.45" stroke-dashoffset="78" stroke-linecap="round"
+            transform="rotate(-90 120 120)"/>
+          <circle cx="120" cy="120" r="78" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+        </svg>
+        <div class="ring-center">
+          <div class="ring-num">88</div>
+          <div class="ring-lbl">Recovery score</div>
+          <div class="ring-status">Ready to perform</div>
+        </div>
+      </div>
+      <div>
+        <div class="lbl reveal">Daily Readiness</div>
+        <h2 class="title reveal d1">Your body<br>tells the truth</h2>
+        <p class="body-text reveal d2">Every morning, ZONE synthesizes your overnight HRV, sleep quality, and accumulated training load into a single readiness score. No guesswork — just data.</p>
+        <div class="metric-rows reveal d3">
+          <div class="metric-row">
+            <div class="metric-icon-wrap" style="background:rgba(29,184,122,.1)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 13s-6-4-6-7.5A3.5 3.5 0 018 2a3.5 3.5 0 016 3.5C14 9 8 13 8 13z" stroke="#1db87a" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="metric-info">
+              <div class="metric-nm">Heart Rate Variability</div>
+              <div class="metric-vl c-green">44 ms</div>
+              <div class="metric-bar-bg"><div class="metric-bar" style="width:73%;background:var(--green)"></div></div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-icon-wrap" style="background:rgba(47,126,245,.1)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2C5 2 3 4 3 8s2 6 5 6 5-2 5-6-2-6-5-6z" stroke="#2f7ef5" stroke-width="1.4"/><path d="M5 8h6M8 5v6" stroke="#2f7ef5" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <div class="metric-info">
+              <div class="metric-nm">Sleep Quality</div>
+              <div class="metric-vl c-blue">75%</div>
+              <div class="metric-bar-bg"><div class="metric-bar" style="width:75%;background:var(--blue)"></div></div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-icon-wrap" style="background:rgba(224,78,31,.08)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v4M8 10v4M2 8h4M10 8h4" stroke="#e04e1f" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="2" stroke="#e04e1f" stroke-width="1.4"/></svg>
+            </div>
+            <div class="metric-info">
+              <div class="metric-nm">Training Strain</div>
+              <div class="metric-vl c-orange">13.1</div>
+              <div class="metric-bar-bg"><div class="metric-bar" style="width:55%;background:var(--orange)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING PLANS -->
+<section id="plans" class="section plan-section">
+  <div class="section-inner">
+    <div class="two-col flip">
+      <div>
+        <div class="lbl reveal">Intelligent Planning</div>
+        <h2 class="title reveal d1">Plans that<br>think ahead</h2>
+        <p class="body-text reveal d2">Every plan is structured in training blocks — base, build, peak, taper — and adapts when life gets in the way. Miss a session? ZONE recalibrates.</p>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-top:32px" class="reveal d3">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:32px;height:32px;border-radius:9px;background:var(--orange-10);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="2" y="1" width="11" height="13" rx="2" stroke="#e04e1f" stroke-width="1.3"/><path d="M5 5h5M5 8h5M5 11h3" stroke="#e04e1f" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div style="font-family:var(--font-h);font-weight:700;font-size:15px;margin-bottom:3px;color:var(--ink)">Block Periodization</div>
+              <div style="font-size:13px;color:var(--ink-3);line-height:1.65">Base → Build → Peak → Taper. The same system elite coaches use, automated for every athlete.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:32px;height:32px;border-radius:9px;background:rgba(29,184,122,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 7.5A5.5 5.5 0 0013 7.5" stroke="#1db87a" stroke-width="1.3" stroke-linecap="round"/><path d="M10.5 5L13 7.5l-2.5 2.5" stroke="#1db87a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div style="font-family:var(--font-h);font-weight:700;font-size:15px;margin-bottom:3px;color:var(--ink)">Auto-adjusting Load</div>
+              <div style="font-size:13px;color:var(--ink-3);line-height:1.65">Recovery scores feed back into the plan. Struggling? ZONE dials back. Thriving? It pushes.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:32px;height:32px;border-radius:9px;background:rgba(47,126,245,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#2f7ef5" stroke-width="1.3"/><path d="M7.5 4.5v3l2 2" stroke="#2f7ef5" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div style="font-family:var(--font-h);font-weight:700;font-size:15px;margin-bottom:3px;color:var(--ink)">Race-day Countdown</div>
+              <div style="font-size:13px;color:var(--ink-3);line-height:1.65">Always know how many days until your goal race and whether you're on track to arrive ready.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal d1">
+        <div class="plan-card">
+          <div class="plan-card-head">
+            <div>
+              <div class="plan-sup">10K Race</div>
+              <div class="plan-nm">16-Week Plan</div>
+              <div class="plan-dt">27 Apr 2026 → 17 Aug 2026</div>
+            </div>
+            <button class="plan-btn">Edit goal</button>
+          </div>
+          <div class="plan-meta">
+            <div class="pm"><div class="pm-num">16</div><div class="pm-lbl">Weeks</div></div>
+            <div class="pm"><div class="pm-num">4</div><div class="pm-lbl">Blocks</div></div>
+            <div class="pm"><div class="pm-num">5.01h</div><div class="pm-lbl">Peak/wk</div></div>
+            <div class="pm"><div class="pm-num" style="color:var(--orange)">Adv.</div><div class="pm-lbl">Level</div></div>
+          </div>
+          <div class="plan-days">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);font-weight:600;margin-bottom:2px">Week 1 schedule</div>
+            <div class="day-row">
+              <div class="day-icon"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="var(--ink-3)" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="var(--ink-3)" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+              <div><div class="day-nm">Mon</div><div class="day-wk">Rest Day</div></div>
+            </div>
+            <div class="day-row today">
+              <div class="day-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3c0 0-2 3-2 6s2 4 2 4" stroke="var(--orange)" stroke-width="1.3" stroke-linecap="round"/><path d="M5 7h6" stroke="var(--orange)" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="13" r="1" fill="var(--orange)"/></svg></div>
+              <div><div class="day-nm">Tue</div><div class="day-wk">Run easy</div></div>
+              <span class="day-tag tag-easy">easy</span>
+            </div>
+            <div class="day-row">
+              <div class="day-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3c0 0-2 3-2 6s2 4 2 4" stroke="var(--ink-3)" stroke-width="1.3" stroke-linecap="round"/><path d="M5 7h6" stroke="var(--ink-3)" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="13" r="1" fill="var(--ink-3)"/></svg></div>
+              <div><div class="day-nm">Wed</div><div class="day-wk">Run easy</div></div>
+              <span class="day-tag tag-easy">easy</span>
+            </div>
+            <div class="day-row">
+              <div class="day-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3c0 0-2 3-2 6s2 4 2 4" stroke="var(--blue)" stroke-width="1.3" stroke-linecap="round"/><path d="M5 7h6" stroke="var(--blue)" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="13" r="1" fill="var(--blue)"/></svg></div>
+              <div><div class="day-nm">Thu</div><div class="day-wk">Tempo intervals</div></div>
+              <span class="day-tag tag-hard">hard</span>
+            </div>
+            <div class="day-row">
+              <div class="day-icon"><svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="var(--ink-3)" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="var(--ink-3)" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+              <div><div class="day-nm">Fri</div><div class="day-wk">Rest Day</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section class="section act-section">
+  <div class="section-inner">
+    <div class="two-col">
+      <div class="phone-side reveal">
+        <img class="side-phone" src="assets/screen-activities.png" alt="Activities">
+      </div>
+      <div>
+        <div class="lbl reveal">Every sport. Every session.</div>
+        <h2 class="title reveal d1">One place for<br>all your training</h2>
+        <p class="body-text reveal d2" style="margin-bottom:24px">Run, ride, swim, lift. ZONE captures every session and builds a unified picture of your fitness.</p>
+        <div class="sport-tabs reveal d2">
+          <button class="sport-tab active" onclick="setSport(this,'run')">Running</button>
+          <button class="sport-tab" onclick="setSport(this,'bike')">Cycling</button>
+          <button class="sport-tab" onclick="setSport(this,'tri')">Triathlon</button>
+        </div>
+        <div class="act-list reveal d3" id="act-list">
+          <div class="act-card">
+            <div class="act-icon"><svg viewBox="0 0 18 18" fill="none"><path d="M5 14l3-8 3 5 2-3 2 2" stroke="#e04e1f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="act-nm">IRONMAN 70.3 — Run</div><div class="act-dt">19 Apr 2026</div></div>
+            <div class="act-stats">
+              <div><div class="act-sv">20.8 km</div><div class="act-sl">Distance</div></div>
+              <div><div class="act-sv">5:44/km</div><div class="act-sl">Pace</div></div>
+              <div><div class="act-sv" style="color:var(--orange)">146 bpm</div><div class="act-sl">HR</div></div>
+            </div>
+          </div>
+          <div class="act-card">
+            <div class="act-icon"><svg viewBox="0 0 18 18" fill="none"><path d="M5 14l3-8 3 5 2-3 2 2" stroke="#e04e1f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="act-nm">Morning Run</div><div class="act-dt">18 Apr 2026</div></div>
+            <div class="act-stats">
+              <div><div class="act-sv">12.4 km</div><div class="act-sl">Distance</div></div>
+              <div><div class="act-sv">5:12/km</div><div class="act-sl">Pace</div></div>
+              <div><div class="act-sv" style="color:var(--green)">138 bpm</div><div class="act-sl">HR</div></div>
+            </div>
+          </div>
+          <div class="act-card">
+            <div class="act-icon"><svg viewBox="0 0 18 18" fill="none"><path d="M5 14l3-8 3 5 2-3 2 2" stroke="#e04e1f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="act-nm">Lunch Workout</div><div class="act-dt">17 Apr 2026</div></div>
+            <div class="act-stats">
+              <div><div class="act-sv">45 min</div><div class="act-sl">Duration</div></div>
+              <div><div class="act-sv">Strength</div><div class="act-sl">Type</div></div>
+              <div><div class="act-sv" style="color:var(--blue)">155 bpm</div><div class="act-sl">HR</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HR ZONES -->
+<section class="section zones-section">
+  <div class="section-inner">
+    <div class="two-col">
+      <div>
+        <div class="lbl reveal">Performance Science</div>
+        <h2 class="title reveal d1">Train in the<br>right zones</h2>
+        <p class="body-text reveal d2">Zone training is the difference between grinding and gaining. ZONE calculates your personal zones and targets every session precisely.</p>
+        <div class="perf-row reveal d3">
+          <div class="perf-chip">
+            <div class="perf-val" style="color:var(--orange)">56 ml/kg/min</div>
+            <div class="perf-lbl">VO₂max</div>
+          </div>
+          <div class="perf-chip">
+            <div class="perf-val" style="color:var(--green)">4:49/km</div>
+            <div class="perf-lbl">Threshold Pace</div>
+          </div>
+          <div class="perf-chip">
+            <div class="perf-val" style="color:var(--blue)">190 bpm</div>
+            <div class="perf-lbl">Max HR</div>
+          </div>
+        </div>
+      </div>
+      <div class="zones-card reveal d1">
+        <div class="zones-hd">HR Zones — % Max HR · Auto-detected</div>
+        <div class="hz-row"><div class="hz-bar" style="background:#60d9a0"></div><div class="hz-nm">Z1 <span class="hz-s">Recovery</span></div><div class="hz-rng" style="color:#1db87a">0 – 114 bpm</div></div>
+        <div class="hz-row"><div class="hz-bar" style="background:var(--blue)"></div><div class="hz-nm">Z2 <span class="hz-s">Aerobic</span></div><div class="hz-rng" style="color:var(--blue)">114 – 133 bpm</div></div>
+        <div class="hz-row"><div class="hz-bar" style="background:var(--yellow)"></div><div class="hz-nm">Z3 <span class="hz-s">Tempo</span></div><div class="hz-rng" style="color:#c9a020">133 – 152 bpm</div></div>
+        <div class="hz-row"><div class="hz-bar" style="background:var(--orange-2)"></div><div class="hz-nm">Z4 <span class="hz-s">Threshold</span></div><div class="hz-rng" style="color:var(--orange-2)">152 – 171 bpm</div></div>
+        <div class="hz-row" style="margin-bottom:0"><div class="hz-bar" style="background:#e63e3e"></div><div class="hz-nm">Z5 <span class="hz-s">Max Effort</span></div><div class="hz-rng" style="color:#e63e3e">171 – 190 bpm</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COACHING -->
+<section class="section coach-section" id="coaching">
+  <div class="section-inner">
+    <div class="two-col flip">
+      <div>
+        <div class="lbl reveal">For Coaches</div>
+        <h2 class="title reveal d1">Your entire<br>roster, one view</h2>
+        <p class="body-text reveal d2" style="margin-bottom:28px">See every athlete's recovery score, weekly training volume, and race readiness at a glance. Know who needs rest before they do.</p>
+        <div class="athlete-list reveal d3">
+          <div class="athlete-row">
+            <div class="av-wrap"><div class="av">SR</div><div class="av-dot g"></div></div>
+            <div><div class="ath-nm">Sofia Reyes</div><div class="ath-meta">Triathlon · Madrid · Ironman 70.3 Build</div></div>
+            <div class="ath-right"><div class="ath-pct" style="color:var(--green)">82%</div><div class="ath-rlbl">Recovery</div><div class="ath-km">62 km/wk</div></div>
+          </div>
+          <div class="athlete-row">
+            <div class="av-wrap"><div class="av">JO</div><div class="av-dot y"></div></div>
+            <div><div class="ath-nm">James Okafor</div><div class="ath-meta">Running · London · Marathon Build</div></div>
+            <div class="ath-right"><div class="ath-pct" style="color:var(--yellow)">55%</div><div class="ath-rlbl">Recovery</div><div class="ath-km">75 km/wk</div></div>
+          </div>
+          <div class="athlete-row">
+            <div class="av-wrap"><div class="av">AC</div><div class="av-dot r"></div></div>
+            <div><div class="ath-nm">Anna Chen</div><div class="ath-meta">Cycling · Singapore · Gran Fondo Base</div></div>
+            <div class="ath-right"><div class="ath-pct" style="color:var(--red)">35%</div><div class="ath-rlbl">Recovery</div><div class="ath-km">180 km/wk</div></div>
+          </div>
+          <div class="athlete-row">
+            <div class="av-wrap"><div class="av">MB</div><div class="av-dot g"></div></div>
+            <div><div class="ath-nm">Marco Bianchi</div><div class="ath-meta">Triathlon · Milan · Sprint Tri Peak</div></div>
+            <div class="ath-right"><div class="ath-pct" style="color:var(--green)">71%</div><div class="ath-rlbl">Recovery</div><div class="ath-km">45 km/wk</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-side reveal d1">
+        <img class="side-phone" src="assets/screen-social.png" alt="Coaching dashboard">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testi-section">
+  <div class="section-inner">
+    <div style="text-align:center">
+      <div class="lbl reveal" style="justify-content:center">What athletes say</div>
+      <h2 class="title reveal d1" style="text-align:center;max-width:500px;margin:0 auto">Results that speak<br>for themselves</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="testi-quote">"ZONE completely changed how I approach training. My HRV-based recovery scores have helped me avoid overtraining and finally hit a new marathon PB."</p>
+        <div class="testi-author">
+          <div class="testi-av">MK</div>
+          <div><div class="testi-nm">Maria K.</div><div class="testi-role">Marathon runner · Berlin</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d1">
+        <div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="testi-quote">"As a coach, the dashboard is exactly what I needed. I can see at a glance who's ready to push and who needs an easy day. It saves me hours every week."</p>
+        <div class="testi-author">
+          <div class="testi-av">DL</div>
+          <div><div class="testi-nm">David L.</div><div class="testi-role">Triathlon coach · Barcelona</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d2">
+        <div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="testi-quote">"The AI training plan adapted perfectly when I missed a week due to illness. It recalibrated everything and I still made it to my Ironman 70.3 in great shape."</p>
+        <div class="testi-author">
+          <div class="testi-av">TR</div>
+          <div><div class="testi-nm">Tom R.</div><div class="testi-role">Triathlete · London</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <div class="cta-band-inner">
+    <div class="cta-badge">Free forever for athletes</div>
+    <h2>Your next race<br>starts today</h2>
+    <p>Set your goal. Connect your data. Let ZONE build the plan that gets you to the finish line — stronger than you've ever been.</p>
+  </div>
+  <div class="cta-band-btns">
+    <a href="#" class="app-btn">
+      <div class="app-btn-icon">
+        <svg viewBox="0 0 26 26" fill="none"><rect width="26" height="26" rx="6" fill="#111010"/><path d="M13 5c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm1 11.5v-3h2.5L13 8l-3.5 5.5H12v3h2z" fill="white"/></svg>
+      </div>
+      <div class="app-btn-txt"><span class="sm">Coming soon on the</span><span class="lg">App Store</span></div>
+    </a>
+    <a href="#" class="app-btn">
+      <div class="app-btn-icon">
+        <svg viewBox="0 0 26 26" fill="none"><rect width="26" height="26" rx="6" fill="#111010"/><path d="M7 8.5l7.5 4.5-7.5 4.5V8.5z" fill="#34A853"/><path d="M7 8.5l5.5 5.5-5.5 5.5V8.5z" fill="#4285F4"/><path d="M14.5 13l4.5-2.5-4.5-2V13z" fill="#FBBC05"/><path d="M14.5 13l-5.5 5.5L19 16l-4.5-3z" fill="#EA4335"/></svg>
+      </div>
+      <div class="app-btn-txt"><span class="sm">Coming soon on</span><span class="lg">Google Play</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">
+        <img src="assets/logo.svg" alt="Zone">
+        <span class="footer-logo-txt">ZO<span>N</span>E</span>
+      </div>
+      <p class="footer-desc">AI-powered training intelligence for runners, cyclists, and triathletes who race to win.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Product</div>
+      <ul class="footer-links">
+        <li><a href="#">Training Plans</a></li>
+        <li><a href="#">Recovery Scores</a></li>
+        <li><a href="#">HR Zones</a></li>
+        <li><a href="#">Coaching</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Support</div>
+      <ul class="footer-links">
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 ZONE. All rights reserved.</div>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Settings</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Activity switcher
+const acts = {
+  run: [
+    {icon:'<path d="M5 14l3-8 3 5 2-3 2 2" stroke="#e04e1f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',nm:'IRONMAN 70.3 — Run',dt:'19 Apr 2026',v1:'20.8 km',l1:'Distance',v2:'5:44/km',l2:'Pace',v3:'146 bpm',c3:'var(--orange)'},
+    {icon:'<path d="M5 14l3-8 3 5 2-3 2 2" stroke="#e04e1f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',nm:'Morning Run',dt:'18 Apr 2026',v1:'12.4 km',l1:'Distance',v2:'5:12/km',l2:'Pace',v3:'138 bpm',c3:'var(--green)'},
+    {icon:'<path d="M5 14l3-8 3 5 2-3 2 2" stroke="#e04e1f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',nm:'Lunch Workout',dt:'17 Apr 2026',v1:'45 min',l1:'Duration',v2:'Strength',l2:'Type',v3:'155 bpm',c3:'var(--blue)'},
+  ],
+  bike: [
+    {icon:'<circle cx="5" cy="13" r="3" stroke="#2f7ef5" stroke-width="1.4"/><circle cx="13" cy="13" r="3" stroke="#2f7ef5" stroke-width="1.4"/><path d="M5 13L9 6l4 7" stroke="#2f7ef5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',nm:'IRONMAN 70.3 — Ride',dt:'19 Apr 2026',v1:'90.3 km',l1:'Distance',v2:'34 km/h',l2:'Speed',v3:'152 bpm',c3:'var(--orange)'},
+    {icon:'<circle cx="5" cy="13" r="3" stroke="#2f7ef5" stroke-width="1.4"/><circle cx="13" cy="13" r="3" stroke="#2f7ef5" stroke-width="1.4"/><path d="M5 13L9 6l4 7" stroke="#2f7ef5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',nm:'Sunday Long Ride',dt:'17 Apr 2026',v1:'140.2 km',l1:'Distance',v2:'34 km/h',l2:'Speed',v3:'142 bpm',c3:'var(--green)'},
+    {icon:'<circle cx="5" cy="13" r="3" stroke="#2f7ef5" stroke-width="1.4"/><circle cx="13" cy="13" r="3" stroke="#2f7ef5" stroke-width="1.4"/><path d="M5 13L9 6l4 7" stroke="#2f7ef5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',nm:'Interval Session',dt:'15 Apr 2026',v1:'55.0 km',l1:'Distance',v2:'38 km/h',l2:'Speed',v3:'168 bpm',c3:'var(--red)'},
+  ],
+  tri: [
+    {icon:'<path d="M3 11c3-3 9-3 12 0M3 11c0 4 3 6 6 6s6-2 6-6" stroke="#1db87a" stroke-width="1.4" stroke-linecap="round"/>',nm:'Open Water Swim',dt:'20 Apr 2026',v1:'2.4 km',l1:'Distance',v2:'1:52/100m',l2:'Pace',v3:'148 bpm',c3:'var(--blue)'},
+    {icon:'<path d="M5 14l3-8 3 5 2-3 2 2" stroke="#e04e1f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',nm:'Brick Run',dt:'20 Apr 2026',v1:'8.0 km',l1:'Distance',v2:'4:58/km',l2:'Pace',v3:'172 bpm',c3:'var(--red)'},
+    {icon:'<circle cx="5" cy="13" r="3" stroke="#2f7ef5" stroke-width="1.4"/><circle cx="13" cy="13" r="3" stroke="#2f7ef5" stroke-width="1.4"/><path d="M5 13L9 6l4 7" stroke="#2f7ef5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',nm:'Tempo Ride',dt:'18 Apr 2026',v1:'80.0 km',l1:'Distance',v2:'37 km/h',l2:'Speed',v3:'161 bpm',c3:'var(--orange)'},
+  ]
+};
+window.setSport = function(btn, key) {
+  document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const list = document.getElementById('act-list');
+  list.style.cssText = 'opacity:0;transform:translateY(6px);transition:none';
+  setTimeout(() => {
+    list.innerHTML = acts[key].map(a => `
+      <div class="act-card">
+        <div class="act-icon"><svg viewBox="0 0 18 18" fill="none">${a.icon}</svg></div>
+        <div><div class="act-nm">${a.nm}</div><div class="act-dt">${a.dt}</div></div>
+        <div class="act-stats">
+          <div><div class="act-sv">${a.v1}</div><div class="act-sl">${a.l1}</div></div>
+          <div><div class="act-sv">${a.v2}</div><div class="act-sl">${a.l2}</div></div>
+          <div><div class="act-sv" style="color:${a.c3}">${a.v3}</div><div class="act-sl">HR</div></div>
+        </div>
+      </div>`).join('');
+    list.style.cssText = 'opacity:1;transform:translateY(0);transition:opacity .28s,transform .28s';
+  }, 180);
+};
+</script>
+</body>
+</html>
