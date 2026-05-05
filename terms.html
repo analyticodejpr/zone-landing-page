@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — ZONE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --orange: #e04e1f; --orange-2: #f47c20;
+  --bg: #ffffff; --bg2: #f8f7f5;
+  --ink: #111010; --ink-2: #3a3836; --ink-3: rgba(17,16,16,0.45);
+  --border: rgba(17,16,16,0.08); --border-2: rgba(17,16,16,0.13);
+  --font-h: 'Plus Jakarta Sans', sans-serif; --font-b: 'Inter', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-b); line-height: 1.6; overflow-x: hidden; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 64px; height: 64px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+.nav-logo img { width: 26px; height: 26px; }
+.nav-logo-text { font-family: var(--font-h); font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: var(--ink); }
+.nav-logo-text span { color: var(--orange); }
+.btn-ghost {
+  padding: 8px 18px; border: 1px solid var(--border-2); border-radius: 100px;
+  color: var(--ink-2); font-size: 13px; font-weight: 500; background: none;
+  text-decoration: none; transition: all .2s;
+}
+.btn-ghost:hover { border-color: var(--ink-2); }
+
+.page-wrap { max-width: 760px; margin: 0 auto; padding: 120px 32px 100px; }
+.page-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .12em;
+  color: var(--orange); font-weight: 600; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.page-label::before { content:''; width: 20px; height: 2px; background: var(--orange); border-radius: 1px; }
+h1 { font-family: var(--font-h); font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1.06; margin-bottom: 10px; color: var(--ink); }
+.page-meta { font-size: 13px; color: var(--ink-3); margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+
+.doc-body h2 {
+  font-family: var(--font-h); font-size: 20px; font-weight: 800; letter-spacing: -.4px;
+  color: var(--ink); margin: 40px 0 12px;
+}
+.doc-body p { font-size: 15px; color: var(--ink-2); line-height: 1.8; margin-bottom: 14px; }
+.doc-body ul { padding-left: 20px; margin-bottom: 14px; }
+.doc-body li { font-size: 15px; color: var(--ink-2); line-height: 1.8; margin-bottom: 4px; }
+.doc-body strong { color: var(--ink); font-weight: 600; }
+.doc-body a { color: var(--orange); text-decoration: none; }
+.doc-body a:hover { text-decoration: underline; }
+
+footer {
+  background: var(--ink); color: white;
+  padding: 40px 64px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-logo-txt { font-family: var(--font-h); font-size: 16px; font-weight: 900; letter-spacing: -.3px; color: white; }
+.footer-logo-txt span { color: var(--orange-2); }
+.footer-legal { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-legal a { font-size: 13px; color: rgba(255,255,255,.45); text-decoration: none; transition: color .2s; }
+.footer-legal a:hover { color: white; }
+.footer-copy { font-size: 13px; color: rgba(255,255,255,.35); }
+
+@media (max-width: 768px) {
+  nav { padding: 0 24px; }
+  .page-wrap { padding: 100px 20px 80px; }
+  h1 { font-size: 32px; }
+  footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/logo.svg" alt="Zone">
+    <span class="nav-logo-text">ZO<span>N</span>E</span>
+  </a>
+  <a href="https://www.zoneapp.fit" target="_blank" rel="noopener noreferrer" class="btn-ghost">Open app</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-label">Legal</div>
+  <h1>Terms of Service</h1>
+  <p class="page-meta">Last updated: 5 May 2026 &nbsp;·&nbsp; ZONE app is operated by Javier Prieto Ramos, Spain &nbsp;·&nbsp; <a href="mailto:jprietoramosruiz@gmail.com">jprietoramosruiz@gmail.com</a></p>
+
+  <div class="doc-body">
+    <p>These Terms of Service ("Terms") govern your access to and use of ZONE app ("ZONE", "we", "us", or "our"). By using ZONE app, you agree to these Terms.</p>
+
+    <h2>1. What ZONE app provides</h2>
+    <p>ZONE app is a consumer fitness web application that helps users view, understand, and use training, recovery, and readiness data. ZONE may connect with third-party services such as Strava and WHOOP if you choose to authorize those connections.</p>
+    <p>ZONE may provide: fitness dashboards, training summaries, readiness insights, AI-assisted training explanations, AI-assisted training planning support, subjective check-ins, and training plan recommendations.</p>
+
+    <h2>2. Not medical advice or professional coaching</h2>
+    <p>ZONE app is not a medical device, healthcare service, doctor, physical therapist, or professional coaching service. The app does not diagnose, treat, prevent, or cure any disease, injury, or medical condition.</p>
+    <p>Any training plans, readiness insights, AI-generated outputs, or recommendations are for general informational and fitness-support purposes only. You are responsible for deciding whether any activity, workout, plan, or recommendation is appropriate for you. Consult a qualified healthcare professional before starting or changing a training program, especially if you have an injury, medical condition, or health concerns.</p>
+
+    <h2>3. Training risk</h2>
+    <p>Exercise involves risk. By using ZONE app, you understand that training can result in fatigue, soreness, injury, overtraining, health complications, or other harm. ZONE may detect that certain plans or workouts may not be suitable based on available information, but ZONE cannot guarantee that all risks will be detected. <strong>You train at your own risk.</strong></p>
+
+    <h2>4. Eligibility</h2>
+    <p>You must be at least 16 years old to use ZONE app. By using the app, you confirm that you meet this age requirement.</p>
+
+    <h2>5. Your account</h2>
+    <p>You are responsible for keeping your account secure, using accurate account information, controlling access to your login method, and notifying us if you believe your account has been compromised. You may not use another person's account without permission.</p>
+
+    <h2>6. Third-party integrations</h2>
+    <p>ZONE may allow you to connect third-party services, including Strava and WHOOP. If you connect a third-party service, you authorize ZONE to access the data you approve through that provider. Your use of that provider remains subject to that provider's own terms and privacy policy. ZONE is not responsible for the availability, accuracy, or actions of third-party services. You can disconnect Strava or WHOOP in the app at any time.</p>
+
+    <h2>7. AI-generated outputs</h2>
+    <p>ZONE uses AI to help generate explanations, summaries, and training-related outputs. AI-generated content may be incomplete, inaccurate, outdated, or unsuitable for your personal situation. You should not rely solely on AI-generated content to make health, medical, safety, or high-risk decisions. ZONE does not guarantee any fitness result, race result, health outcome, or performance improvement.</p>
+
+    <h2>8. User-provided information</h2>
+    <p>You may provide information such as goals, preferences, subjective check-ins, fatigue, soreness, mood, motivation, stress, confidence, and injury flags. You confirm that the information you provide is accurate to the best of your knowledge. ZONE uses this information to operate and personalize the app.</p>
+
+    <h2>9. Acceptable use</h2>
+    <p>You agree not to misuse the app, attempt to access another user's data, scrape or harvest data from the app, reverse engineer the app (except where legally permitted), interfere with the security or operation of the app, use the app for unlawful purposes, upload malicious code, abuse integrations with any connected service, attempt to bypass access controls, or use the app in a way that harms ZONE, other users, or third-party providers.</p>
+
+    <h2>10. Suspension or termination</h2>
+    <p>We may suspend or terminate your account if you violate these Terms, misuse the app, create security or legal risk, abuse third-party integrations, or if we are required to do so by law or by a third-party provider. You may stop using the app at any time and may delete your account in the app.</p>
+
+    <h2>11. Free service</h2>
+    <p>ZONE app is currently provided for free. There are currently no payments, subscriptions, or refund policies. We may introduce paid features in the future. If we do, we will provide applicable pricing and payment terms before charging users.</p>
+
+    <h2>12. Intellectual property</h2>
+    <p>ZONE app, including its design, software, branding, content, and features, is owned by or licensed to ZONE. You may use ZONE only as permitted by these Terms. You may not copy, resell, reproduce, distribute, or create competing services from ZONE's content, software, or functionality except where legally permitted.</p>
+
+    <h2>13. Your data</h2>
+    <p>Your privacy is governed by our <a href="privacy.html">Privacy Policy</a>. You may request deletion of your data as described on the <a href="data-deletion.html">Data Deletion page</a>.</p>
+
+    <h2>14. Availability and changes</h2>
+    <p>ZONE is provided on an "as available" basis. We may modify, pause, discontinue, or change parts of the app at any time. We do not guarantee that the app will always be available, error-free, secure, or compatible with every device, browser, provider, or integration.</p>
+
+    <h2>15. Disclaimers</h2>
+    <p>To the maximum extent permitted by law, ZONE is provided without warranties of any kind, whether express or implied. We do not guarantee training results, health outcomes, performance improvements, injury prevention, uninterrupted service, perfect data accuracy, provider availability, or AI output accuracy. Nothing in these Terms limits rights that cannot be limited under applicable consumer protection law.</p>
+
+    <h2>16. Limitation of liability</h2>
+    <p>To the maximum extent permitted by law, ZONE and its operator will not be liable for indirect, incidental, special, consequential, or punitive damages, including loss of data, lost profits, loss of goodwill, personal training decisions, or reliance on AI-generated content. Nothing in these Terms excludes liability that cannot be excluded under applicable law.</p>
+
+    <h2>17. Governing law</h2>
+    <p>These Terms are governed by the laws of Spain. If you are a consumer in another country, you may also have mandatory consumer protection rights under the laws of your country of residence.</p>
+
+    <h2>18. Changes to these Terms</h2>
+    <p>We may update these Terms from time to time. If we make material changes, we will update the "Last updated" date and, where appropriate, notify users through the app or website. Your continued use of ZONE after changes become effective means you accept the updated Terms.</p>
+
+    <h2>19. Contact</h2>
+    <p>For questions about these Terms, contact:<br>
+    <strong>Javier Prieto Ramos</strong><br>
+    Email: <a href="mailto:jprietoramosruiz@gmail.com">jprietoramosruiz@gmail.com</a><br>
+    Country: Spain<br>
+    Website: <a href="https://www.zonelanding.info">www.zonelanding.info</a></p>
+  </div>
+</div>
+
+<footer>
+  <span class="footer-logo-txt">ZO<span>N</span>E</span>
+  <div class="footer-legal">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="data-deletion.html">Data Deletion</a>
+  </div>
+  <span class="footer-copy">© 2026 ZONE. All rights reserved.</span>
+</footer>
+
+</body>
+</html>
